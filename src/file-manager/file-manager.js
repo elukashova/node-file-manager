@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export class FileManager {
     constructor(username) {
-        this.location = __dirname;
+        this.location = process.cwd();
         this.username = username;
     }
 
@@ -23,12 +23,14 @@ export class FileManager {
         process.on('SIGINT', () => this.handleExit());
     }
 
-    async handleInput(args) {
-        const input = args.toString('utf-8').trim().split(' ');
-        const validatedInput = validateInput(input);
+    async handleInput(inputArgs) {
+        const userInput = inputArgs.toString('utf-8').trim().split(' ');
+        const validatedInput = validateInput(userInput);
+        const { input, args } = validatedInput;
 
         try {
-            await this.runCommand(validatedInput.input);
+            await this.runCommand(input, args);
+            this.location = process.cwd();
         } catch (error) {
             console.log(error);
         }
@@ -36,22 +38,13 @@ export class FileManager {
         console.log('\x1b[36m%s\x1b[0m', `\nYou are currently in ${this.location}\n`);
     }
 
-    async runCommand(input) {
+    async runCommand(input, args) {
         const commandsDirPath = path.join(__dirname, './commands');
         const commandsPaths = readdirSync(commandsDirPath, { withFileTypes: true }).filter((stat) => stat.isDirectory());
-        const commandFile = commandsPaths.map(({name}) => {
-                if (name === input) {
-                    return import(`./commands/${name}/${name}.js`);
-                }
-            });
-        const command = await Promise.any(commandFile);
-
-        if (input === INPUTS.up) {
-            this.location = command.default(this.location);
-            return;
-        }
-
-        command.default(this.location);
+        const commandFile = commandsPaths.filter(({ name }) => name === input);
+        const { name } = commandFile[0];
+        const command = await import(`./commands/${name}/${name}.js`);
+        command.default(args);
     }
 
     handleExit() {
