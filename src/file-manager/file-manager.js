@@ -1,10 +1,5 @@
-import { readdirSync } from 'node:fs';
-import * as path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { ERROR_MESSAGES } from '../consts.js';
 import { validateInput } from '../utils/validateInput.js';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { commandRunner } from './command-runner.js';
 
 export class FileManager {
     constructor(username) {
@@ -27,9 +22,10 @@ export class FileManager {
         const userInput = inputArgs.toString('utf-8').trim().split(' ');
         const validatedInput = validateInput(userInput);
         const { input, args } = validatedInput;
+        this.checkForExit(input);
 
         try {
-            await this.runCommand(input, args);
+            await commandRunner(input, args);
             this.location = process.cwd();
         } catch (error) {
             console.log(error);
@@ -38,21 +34,14 @@ export class FileManager {
         console.log('\x1b[36m%s\x1b[0m', `\nYou are currently in ${this.location}\n`);
     }
 
-    async runCommand(input, args) {
-        const commandsDirPath = path.join(__dirname, './commands');
-        const commandsPaths = readdirSync(commandsDirPath, { withFileTypes: true }).filter((stat) => stat.isFile());
-        const commandFile = commandsPaths.filter(({ name }) => name.split(".")[0] === input);
-        const { name } = commandFile[0];
-        const command = await import(`./commands/${name}`);
-        await command.default(args);
+    checkForExit(input) {
+        if (input === '.exit') {
+            this.handleExit();
+        }
     }
 
     handleExit() {
         console.log('\x1b[32m%s\x1b[0m', `\nThank you for using File Manager, ${this.username}, goodbye!`);
         process.exit();
-    }
-
-    throwError() {
-        throw Error(ERROR_MESSAGES.invalidInput);
     }
 }
