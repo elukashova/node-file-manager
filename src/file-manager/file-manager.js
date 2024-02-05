@@ -40,10 +40,10 @@ export class FileManager {
 
     async runCommand(input, args) {
         const commandsDirPath = path.join(__dirname, './commands');
-        const commandsPaths = readdirSync(commandsDirPath, { withFileTypes: true }).filter((stat) => stat.isDirectory());
-        const commandFile = commandsPaths.filter(({ name }) => name === input);
+        const commandsPaths = readdirSync(commandsDirPath, { withFileTypes: true }).filter((stat) => stat.isFile());
+        const commandFile = commandsPaths.filter(({ name }) => name.split(".")[0] === input);
         const { name } = commandFile[0];
-        const command = await import(`./commands/${name}.js`);
+        const command = await import(`./commands/${name}`);
         await command.default(args);
     }
 
