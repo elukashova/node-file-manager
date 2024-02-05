@@ -44,7 +44,7 @@ export class FileManager {
         const commandFile = commandsPaths.filter(({ name }) => name === input);
         const { name } = commandFile[0];
         const command = await import(`./commands/${name}/${name}.js`);
-        command.default(args);
+        await command.default(args);
     }
 
     handleExit() {
