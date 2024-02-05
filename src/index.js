@@ -1,4 +1,4 @@
-import { FileManager } from './file-manager.js';
+import { FileManager } from './file-manager/file-manager.js';
 
 class App {
     constructor() {
