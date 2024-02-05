@@ -1,7 +1,7 @@
 import { readdirSync } from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ERROR_MESSAGES, INPUTS } from '../consts.js';
+import { ERROR_MESSAGES } from '../consts.js';
 import { validateInput } from '../utils/validateInput.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
