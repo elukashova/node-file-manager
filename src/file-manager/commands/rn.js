@@ -1,8 +1,8 @@
 import { rename } from 'node:fs/promises';
 import * as path from 'node:path';
 import { cwd } from 'node:process';
-import { doesFileExist } from '../../../utils/doesFileExist.js';
-import { ERROR_MESSAGES } from '../../../consts.js';
+import { doesFileExist } from '../../utils/doesFileExist.js';
+import { ERROR_MESSAGES } from '../../consts.js';
 
 export default async (args) => {
     if (!args.length) {

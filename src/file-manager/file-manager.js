@@ -43,7 +43,7 @@ export class FileManager {
         const commandsPaths = readdirSync(commandsDirPath, { withFileTypes: true }).filter((stat) => stat.isDirectory());
         const commandFile = commandsPaths.filter(({ name }) => name === input);
         const { name } = commandFile[0];
-        const command = await import(`./commands/${name}/${name}.js`);
+        const command = await import(`./commands/${name}.js`);
         await command.default(args);
     }
 

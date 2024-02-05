@@ -1,7 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { cwd } from 'node:process';
-import { ERROR_MESSAGES } from '../../../consts.js';
+import { ERROR_MESSAGES } from '../../consts.js';
 
 export default async (path) => {
     const newFilePath = resolve(cwd(), `${path}`);

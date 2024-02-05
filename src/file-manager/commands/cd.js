@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
 import { chdir, cwd } from 'node:process';
-import { ERROR_MESSAGES } from '../../../consts.js';
+import { ERROR_MESSAGES } from '../../consts.js';
 
 export default (path) => {
     if (!path.length) {

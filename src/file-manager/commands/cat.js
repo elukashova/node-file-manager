@@ -1,7 +1,7 @@
 import { createReadStream, lstatSync } from 'node:fs';
 import * as path from 'node:path';
 import { cwd } from 'node:process';
-import { ERROR_MESSAGES } from '../../../consts.js';
+import { ERROR_MESSAGES } from '../../consts.js';
 
 export default (pathToFile) => {
     const stat = lstatSync(`${pathToFile}`);
